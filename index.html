@@ -856,7 +856,7 @@
     <p>Y justamente por eso funciona.</p>
   </div>
   <div class="what-image">
-    <img src="A.png" alt="Recital de piano en celebración privada">
+    <img src="a.png" alt="Recital de piano en celebración privada">
   </div>
 </section>
 
@@ -892,7 +892,7 @@
     <p>No interrumpió la noche. La ajustó. En el momento pasó casi desapercibido. Después, todos lo recordaron.</p>
   </div>
   <div class="story-img">
-    <img src="B.png" alt="Celebración privada con piano en vivo">
+    <img src="b.png" alt="Celebración privada con piano en vivo">
   </div>
 </div>
 
@@ -915,15 +915,7 @@
       </div>
     </div>
 
-    <div class="faq-item">
-      <button class="faq-question" aria-expanded="false">
-        <span>¿Cuántas personas tiene que ser la reunión?</span>
-        <div class="faq-icon"></div>
-      </button>
-      <div class="faq-answer">
-        <p>No hay un número mínimo ni máximo. El piano funciona igual de bien en una cena íntima de dos personas que en una recepción más amplia. Lo conversamos según tu celebración.</p>
-      </div>
-    </div>
+
 
     <div class="faq-item">
       <button class="faq-question" aria-expanded="false">
@@ -1068,13 +1060,14 @@
   });
 
   // Contact form
+  const URL_SCRIPT = 'https://script.google.com/macros/s/AKfycbwzYZbVjSRIspodpuBy6xFF9S-tNDSjHyYfK9uI0_LNj57kyn14zj-i_ruF0NVpOL65Ww/exec';
+
   function handleSubmit() {
-    const nombre = document.getElementById('nombre').value.trim();
-    const email = document.getElementById('email').value.trim();
+    const nombre  = document.getElementById('nombre').value.trim();
+    const email   = document.getElementById('email').value.trim();
     const mensaje = document.getElementById('mensaje').value.trim();
 
     if (!nombre || !email || !mensaje) {
-      // Highlight empty required fields
       [['nombre', nombre], ['email', email], ['mensaje', mensaje]].forEach(([id, val]) => {
         const el = document.getElementById(id);
         if (!val) {
@@ -1086,25 +1079,26 @@
     }
 
     const ocasion = document.getElementById('ocasion').value;
-    const fecha = document.getElementById('fecha').value;
+    const fecha   = document.getElementById('fecha').value;
 
-    const subject = encodeURIComponent('Consulta desde concerto.cl — ' + (ocasion || 'Celebración'));
-    const body = encodeURIComponent(
-      'Nombre: ' + nombre + '\n' +
-      'Correo: ' + email + '\n' +
-      'Ocasión: ' + (ocasion || '—') + '\n' +
-      'Fecha tentativa: ' + (fecha || '—') + '\n\n' +
-      'Mensaje:\n' + mensaje
-    );
+    const btn = document.getElementById('send-btn');
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
 
-    window.location.href = 'mailto:concertoprivato@gmail.com?subject=' + subject + '&body=' + body;
-
-    // Show success after brief delay
-    setTimeout(() => {
+    fetch(URL_SCRIPT, {
+      method: 'POST',
+      body: JSON.stringify({ nombre, email, ocasion, fecha, mensaje }),
+    })
+    .then(() => {
       document.getElementById('contact-form-wrap').style.display = 'none';
       const success = document.getElementById('form-success');
       success.classList.add('visible');
-    }, 800);
+    })
+    .catch(() => {
+      btn.disabled = false;
+      btn.textContent = 'Enviar mensaje';
+      alert('Hubo un error al enviar. Por favor intenta de nuevo.');
+    });
   }
 </script>
 
