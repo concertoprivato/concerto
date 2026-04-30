@@ -988,6 +988,10 @@
           <input type="email" id="email" placeholder="Tu correo electrónico" autocomplete="off">
         </div>
         <div class="form-field">
+          <label for="telefono">Teléfono</label>
+          <input type="tel" id="telefono" placeholder="Tu número de contacto" autocomplete="off">
+        </div>
+        <div class="form-field">
           <label for="ocasion">Ocasión</label>
           <select id="ocasion">
             <option value="" disabled selected>¿Qué estás organizando?</option>
@@ -1078,8 +1082,9 @@
       return;
     }
 
-    const ocasion = document.getElementById('ocasion').value;
-    const fecha   = document.getElementById('fecha').value;
+    const ocasion  = document.getElementById('ocasion').value;
+    const fecha    = document.getElementById('fecha').value;
+    const telefono = document.getElementById('telefono').value.trim();
 
     const btn = document.getElementById('send-btn');
     btn.disabled = true;
@@ -1087,7 +1092,7 @@
 
     fetch(URL_SCRIPT, {
       method: 'POST',
-      body: JSON.stringify({ nombre, email, ocasion, fecha, mensaje }),
+      body: JSON.stringify({ nombre, email, telefono, ocasion, fecha, mensaje }),
     })
     .then(() => {
       document.getElementById('contact-form-wrap').style.display = 'none';
